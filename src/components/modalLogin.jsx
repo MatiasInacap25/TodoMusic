@@ -11,10 +11,13 @@ import {
     Link,
 } from "@nextui-org/react";
 import { darkMode } from "../store/darkmode";
+import { useForm } from "react-hook-form";
 
 function ModalRegister() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const modoOscuro = darkMode((state) => state.darkMode);
+
+    const { register } = useForm();
 
     return (
         <>
@@ -37,30 +40,36 @@ function ModalRegister() {
                                 Inicio de sesion
                             </ModalHeader>
                             <ModalBody>
-                                <Input
-                                    autoFocus
-                                    label="Email"
-                                    placeholder="Enter your email"
-                                    variant="bordered"
-                                />
-                                <Input
-                                    label="Password"
-                                    placeholder="Enter your password"
-                                    type="password"
-                                    variant="bordered"
-                                />
-                                <div className="flex py-2 px-1 justify-between">
-                                    <Checkbox
-                                        classNames={{
-                                            label: "text-small",
-                                        }}
-                                    >
-                                        Remember me
-                                    </Checkbox>
-                                    <Link color="primary" href="#" size="sm">
-                                        Forgot password?
-                                    </Link>
-                                </div>
+                                <form action="">
+                                    <Input
+                                        autoFocus
+                                        label="Email"
+                                        placeholder="Ingrese su email"
+                                        variant="bordered"
+                                    />
+                                    <Input
+                                        label="Password"
+                                        placeholder="Enter your password"
+                                        type="password"
+                                        variant="bordered"
+                                    />
+                                    <div className="flex py-2 px-1 justify-between">
+                                        <Checkbox
+                                            classNames={{
+                                                label: "text-small",
+                                            }}
+                                        >
+                                            Remember me
+                                        </Checkbox>
+                                        <Link
+                                            color="primary"
+                                            href="#"
+                                            size="sm"
+                                        >
+                                            Olvido su contraseña?
+                                        </Link>
+                                    </div>
+                                </form>
                             </ModalBody>
                             <ModalFooter>
                                 <Button
