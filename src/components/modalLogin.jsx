@@ -6,23 +6,43 @@ import {
     ModalFooter,
     Button,
     useDisclosure,
-    Checkbox,
     Input,
     Link,
 } from "@nextui-org/react";
 import { darkMode } from "../store/darkmode";
 import { useForm } from "react-hook-form";
+import { login } from "../api/login.api";
+import toast, { Toaster } from "react-hot-toast";
+import { userStore } from "../store/user";
 
 function ModalRegister() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const modoOscuro = darkMode((state) => state.darkMode);
+    const loginUser = userStore((state) => state.login);
 
-    const { register } = useForm();
+    // Solo obtenemos el token y userType del estado
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
+    const onSubmit = handleSubmit(async (data) => {
+        const rest = await login(data);
+        console.log(rest);
+        if (rest.status === 200) {
+            toast.success("Inicio de sesión exitoso");
+            console.log("Toast");
+            const { token, user } = rest.data;
+            loginUser({ token, userType: user.user_type }); // Asegúrate de que `user.role` sea el tipo de usuario
+        }
+    });
 
     return (
         <>
             <Button className="mx-2" onPress={onOpen} color="primary">
-                Iniciar Sesion
+                Iniciar Sesión
             </Button>
             <Modal
                 isOpen={isOpen}
@@ -37,52 +57,64 @@ function ModalRegister() {
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                Inicio de sesion
+                                Inicio de sesión
                             </ModalHeader>
                             <ModalBody>
-                                <form action="">
+                                <form onSubmit={onSubmit}>
                                     <Input
                                         autoFocus
                                         label="Email"
                                         placeholder="Ingrese su email"
                                         variant="bordered"
+                                        {...register("email", {
+                                            required: {
+                                                value: true,
+                                                message:
+                                                    "Debe ingresar un email",
+                                            },
+                                            pattern: {
+                                                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+                                                message:
+                                                    "Debe ingresar un email valido",
+                                            },
+                                        })}
                                     />
+                                    {errors.email && (
+                                        <span className="text-red-500 text-sm ml-1">
+                                            {errors.email.message}
+                                        </span>
+                                    )}
                                     <Input
+                                        className="mt-3"
                                         label="Password"
-                                        placeholder="Enter your password"
+                                        placeholder="Ingrese su contraseña"
                                         type="password"
                                         variant="bordered"
+                                        {...register("password")}
                                     />
                                     <div className="flex py-2 px-1 justify-between">
-                                        <Checkbox
-                                            classNames={{
-                                                label: "text-small",
-                                            }}
-                                        >
-                                            Remember me
-                                        </Checkbox>
                                         <Link
                                             color="primary"
                                             href="#"
                                             size="sm"
                                         >
-                                            Olvido su contraseña?
+                                            ¿Olvidó su contraseña?
                                         </Link>
                                     </div>
+                                    <ModalFooter>
+                                        <Button
+                                            color="danger"
+                                            variant="flat"
+                                            onPress={onClose}
+                                        >
+                                            Cerrar
+                                        </Button>
+                                        <Button color="primary" type="submit">
+                                            Iniciar sesión
+                                        </Button>
+                                    </ModalFooter>
                                 </form>
                             </ModalBody>
-                            <ModalFooter>
-                                <Button
-                                    color="danger"
-                                    variant="flat"
-                                    onPress={onClose}
-                                >
-                                    Close
-                                </Button>
-                                <Button color="primary" onPress={onClose}>
-                                    Sign in
-                                </Button>
-                            </ModalFooter>
                         </>
                     )}
                 </ModalContent>
