@@ -1,41 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Link, Button } from "@nextui-org/react";
-
-const genres = [
-    "Rock",
-    "Pop",
-    "Jazz",
-    "Hip Hop",
-    "Classical",
-    "Reggae",
-    "Blues",
-    "Electronic",
-    "Country",
-    "Metal",
-    "Reggaeton",
-    "Death Metal",
-    "genero1",
-    "genero2",
-    "genero2",
-    "genero2",
-    "genero2",
-    "genero2",
-];
+import { getGeneros } from "../api/api";
 
 const ListaGeneros = () => {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
+    const [generos, setGeneros] = useState([]); // Usar estado para almacenar los géneros
 
-    const itemWidth = 170; // Asumiendo cada género tiene un ancho de 150px
-    const containerWidth = window.innerWidth; // Asumiendo que el contenedor muestra 3 géneros a la vez
-    const maxScroll = -(genres.length * itemWidth - containerWidth + 170);
+    const rest = async () => {
+        const response = await getGeneros();
+        const generosData = response.data.map((genero) => genero.nombre);
+        setGeneros(generosData); // Actualizar el estado con los nombres de los géneros
+    };
+
+    useEffect(() => {
+        rest(); // Llamar a la función al montar el componente
+    }, []);
+
+    const itemWidth = 170; // Ancho de cada género
+    const containerWidth = window.innerWidth; // Ancho del contenedor
+    const maxScroll = -(generos.length * itemWidth - containerWidth + 170);
 
     useEffect(() => {
         // Actualizar los estados de los botones cada vez que cambia la posición del scroll
         setCanScrollLeft(scrollPosition < 0);
         setCanScrollRight(scrollPosition > maxScroll);
-    }, [scrollPosition, maxScroll]);
+    }, [scrollPosition, maxScroll, generos.length]); // Asegúrate de agregar generos.length aquí
 
     const scrollRight = () => {
         setScrollPosition((prevPosition) => {
@@ -66,15 +57,15 @@ const ListaGeneros = () => {
                     className="carousel-track"
                     style={{ transform: `translateX(${scrollPosition}px)` }}
                 >
-                    {genres.map((genre, index) => (
+                    {generos.map((genero, index) => (
                         <Button
                             key={index}
                             as={Link}
                             color="primary"
-                            className="carousel-item "
-                            href=""
+                            className="carousel-item"
+                            href={`/filtroGenero/${encodeURIComponent(genero)}`}
                         >
-                            {genre}
+                            {genero} {/* Mostrar el nombre del género aquí */}
                         </Button>
                     ))}
                 </div>

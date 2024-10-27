@@ -10,3 +10,11 @@ export const login = (loginData) => {
 export const registerUser = (registerData) => {
     return api.post("/register", registerData);
 };
+
+export const getGeneros = () => {
+    return api.get("/generos");
+};
+
+export const getArtistasByGenero = (genero) => {
+    return api.get(`/artistas/genero/${genero}`);
+};

@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
 import Header from "./components/header";
 import { darkMode } from "./store/darkmode";
+import FiltroGenero from "./pages/filtroGenero";
+import Artista from "./pages/artista";
 
 function App() {
     const modoOscuro = darkMode((state) => state.darkMode);
@@ -17,6 +19,14 @@ function App() {
                     <Header />
                     <Routes>
                         <Route path="/" element={<Home />} />
+                        <Route
+                            path="/filtroGenero/:genero"
+                            element={<FiltroGenero />}
+                        ></Route>
+                        <Route
+                            path="/artista/:artista"
+                            element={<Artista />}
+                        ></Route>
                     </Routes>
                 </Router>
             </main>
