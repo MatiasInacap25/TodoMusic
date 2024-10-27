@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { darkMode } from "../store/darkmode";
 import { useForm } from "react-hook-form";
-import { login } from "../api/login.api";
+import { login } from "../api/api";
 import toast, { Toaster } from "react-hot-toast";
 import { userStore } from "../store/user";
 
@@ -30,10 +30,8 @@ function ModalRegister() {
 
     const onSubmit = handleSubmit(async (data) => {
         const rest = await login(data);
-        console.log(rest);
         if (rest.status === 200) {
             toast.success("Inicio de sesión exitoso");
-            console.log("Toast");
             const { token, user } = rest.data;
             loginUser({ token, userType: user.user_type }); // Asegúrate de que `user.role` sea el tipo de usuario
         }
