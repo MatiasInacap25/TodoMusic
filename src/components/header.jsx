@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Button, Input, Modal } from "@nextui-org/react";
 import ListaGeneros from "./listaGeneros";
 import { darkMode } from "../store/darkmode";
@@ -6,8 +6,12 @@ import ModalRegister from "./modalRegister";
 import ModalLogin from "./modalLogin";
 import { userStore } from "../store/user";
 import toast, { Toaster } from "react-hot-toast";
+import { getBuscadorArtistas } from "../api/api";
+import { Image } from "@nextui-org/image";
 
 function Header() {
+    const [search, setSearch] = useState("");
+    const [results, setResults] = useState([]);
     const changeDarkMode = darkMode((state) => state.setDarkMode);
     const token = userStore((state) => state.token);
     console.log(token);
@@ -15,6 +19,23 @@ function Header() {
     const onSubmit = () => {
         CerrarSesion();
         toast.success("Sesion cerrada");
+    };
+
+    const rest = async (value) => {
+        const response = await getBuscadorArtistas(value);
+        setResults(response.data);
+    };
+
+    const handleSearchChange = async (e) => {
+        const value = e.target.value;
+        setSearch(value);
+
+        // Hacer una llamada a la API para obtener los artistas
+        if (value) {
+            rest(value);
+        } else {
+            setResults([]); // Limpiar resultados si no hay texto en el input
+        }
     };
 
     return (
@@ -50,14 +71,35 @@ function Header() {
                     </Button>
                 </div>
                 {/* div 2 */}
-                <div className="flex justify-center items-center">
+                <div className="flex justify-center items-center relative">
                     <Input
                         radius="full"
                         className=""
                         type="text"
                         placeholder="Buscar Aristas"
                         color="default"
+                        value={search}
+                        onChange={handleSearchChange}
                     />
+                    {results.length > 0 && (
+                        <div className="absolute top-full left-0 w-full bg-white border border-gray-300 z-10 mt-1 rounded-lg border-black">
+                            <ul className="max-h-60 overflow-y-auto rounded-lg">
+                                {results.map((artist) => (
+                                    <li
+                                        key={artist.id}
+                                        className="p-2 hover:bg-gray-200 rounded-lg"
+                                    >
+                                        <Link
+                                            className="text-black"
+                                            href={`/${artist.nombre}`}
+                                        >
+                                            {artist.nombre}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
                 {/* div 3 */}
                 <div className="flex justify-center items-center">

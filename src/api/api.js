@@ -30,3 +30,7 @@ export const getEventosByArtista = (artista) => {
 export const getAlbumsByArtista = (artista) => {
     return api.get(`/albumes/${artista}`);
 };
+
+export const getBuscadorArtistas = (query) => {
+    return api.get(`/artistas/?query=${query}`);
+};
