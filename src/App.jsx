@@ -23,10 +23,8 @@ function App() {
                             path="/filtroGenero/:genero"
                             element={<FiltroGenero />}
                         ></Route>
-                        <Route
-                            path="/artista/:artista"
-                            element={<Artista />}
-                        ></Route>
+                        <Route path="/:artista" element={<Artista />}></Route>
+                        <Route path="/:artista/eventos/:id"></Route>
                     </Routes>
                 </Router>
             </main>

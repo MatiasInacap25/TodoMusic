@@ -7,12 +7,11 @@ import { useNavigate } from "react-router-dom";
 function FiltroGenero() {
     const navigate = useNavigate();
     const [artistas, setArtistas] = useState([]);
-
     const { genero } = useParams();
+
     const rest = async () => {
         const response = await getArtistasByGenero(genero);
         setArtistas(response.data);
-        console.log(artistas);
     };
 
     useEffect(() => {
@@ -20,16 +19,13 @@ function FiltroGenero() {
     }, [genero]);
 
     return (
-        <div className="w-9/12 principal">
+        <div className="w-8/12 principal">
             <div className="gap-2 grid sm:grid-cols-6">
                 {artistas.map((artista, index) => (
                     <Card
                         isPressable
                         onPress={() => {
-                            navigate(
-                                `/artista/${encodeURIComponent(artista.nombre)}`
-                            );
-                            console.log("click");
+                            navigate(`/${encodeURIComponent(artista.nombre)}`);
                         }}
                         key={index}
                         radius="lg"
@@ -38,7 +34,7 @@ function FiltroGenero() {
                     >
                         <img src={artista.foto} alt="" />
                         <CardFooter className="justify-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                            <p>{artista.nombre}</p>
+                            <p className="text-white">{artista.nombre}</p>
                         </CardFooter>
                     </Card>
                 ))}

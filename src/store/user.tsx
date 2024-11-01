@@ -3,7 +3,7 @@ import { create } from "zustand";
 // Función para obtener el estado inicial del almacenamiento local
 const getInitialUserState = () => {
     const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : { token: "", userType: "" }; // Solo token y userType
+    return storedUser ? JSON.parse(storedUser) : { token: "", userType: "" }; 
 };
 
 export const userStore = create((set) => ({

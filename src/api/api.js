@@ -18,3 +18,15 @@ export const getGeneros = () => {
 export const getArtistasByGenero = (genero) => {
     return api.get(`/artistas/genero/${genero}`);
 };
+
+export const getArtistasInfo = (artista) => {
+    return api.get(`/artista/${artista}`);
+};
+
+export const getEventosByArtista = (artista) => {
+    return api.get(`/eventos/${artista}`);
+};
+
+export const getAlbumsByArtista = (artista) => {
+    return api.get(`/albumes/${artista}`);
+};
