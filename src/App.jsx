@@ -4,6 +4,7 @@ import Header from "./components/header";
 import { darkMode } from "./store/darkmode";
 import FiltroGenero from "./pages/filtroGenero";
 import Artista from "./pages/artista";
+import Evento from "./pages/evento";
 
 function App() {
     const modoOscuro = darkMode((state) => state.darkMode);
@@ -24,7 +25,10 @@ function App() {
                             element={<FiltroGenero />}
                         ></Route>
                         <Route path="/:artista" element={<Artista />}></Route>
-                        <Route path="/:artista/eventos/:id"></Route>
+                        <Route
+                            path="/:artista/eventos/:id"
+                            element={<Evento />}
+                        ></Route>
                     </Routes>
                 </Router>
             </main>

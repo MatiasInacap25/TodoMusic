@@ -82,7 +82,7 @@ function Header() {
                         onChange={handleSearchChange}
                     />
                     {results.length > 0 && (
-                        <div className="absolute top-full left-0 w-full bg-white border border-gray-300 z-10 mt-1 rounded-lg border-black">
+                        <div className="absolute top-full left-0 w-full bg-white border  z-10 mt-1 rounded-lg border-black">
                             <ul className="max-h-60 overflow-y-auto rounded-lg">
                                 {results.map((artist) => (
                                     <li
